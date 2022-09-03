@@ -1,8 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const morgan = require('morgan');
-const { Console } = require('console');
 dotenv.config();
 const app = express();
 
@@ -19,7 +17,11 @@ con.on('open', error => {
 
 
 
-
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 
 app.use(express.json);
 app.use(express.urlencoded());
