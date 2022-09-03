@@ -9,7 +9,7 @@ router.post('/signup', async (req, res) => {
 
     console.log(req.body);
     // checks
-    if(!fullname ||!email || !password || !phone){
+    if(!email || !password || !phone){
         return res.status(400).send({status: 'error', msg: 'All fields should be filled'});
     }
 
@@ -21,10 +21,6 @@ router.post('/signup', async (req, res) => {
 
         let user = new User;
 
-        const token = jwt.sign({
-            _id: user._id,
-            email: user.email
-        }, process.env.JWT_SECRET);
 
         user.email = email;
         user.password = bpassword;
@@ -35,10 +31,10 @@ router.post('/signup', async (req, res) => {
 
         user = await user.save();
 
-        // const token = jwt.sign({
-        //     _id: user._id,
-        //     email: user.email
-        // }, process.env.JWT_SECRET);
+        const token = jwt.sign({
+            _id: user._id,
+            email: user.email
+        }, process.env.JWT_SECRET);
 
         // TODO: Debug later
         // console.log(user, 'here 1');
