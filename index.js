@@ -6,6 +6,7 @@ const app = express();
 
 mongoose.connect(process.env.MONGO_URI);
 
+let clients = [];
 const con = mongoose.connection;
 con.on('open', error => {
     if(!error){
@@ -47,9 +48,33 @@ io.on('connection', (socket)=>{
         ConnectedUser.delete(socket.id);
     });
 
-    socket.on('message',(data)=>{
+    socket.on('signin',(id)=>{
 
-        console.log(data);
-        socket.broadcast.emit('message-receive', data)
+        clients[id]= socket;
+        console.log(id);
+
+        // socket.broadcast.emit('message-receive', data)
     })
+
+    socket.on('message',(msg)=>{
+
+        let targetId = msg.targetId;
+
+        // The receiver of the message might not be present online at that time
+        // or might not be on the chat page rather. So if the receiver is on the chat page i.e we have his socket id
+        // then you can send his message if not, dont send the message
+        // we rather will only send the message to the database and when the client opens that page, the init state
+        // loads the msg, or the user can also have the socket on down on the page where his contacts are 
+        // That page only listens for new messages and the numner of times the messages was sent 
+        // Thats what displays on your screen when you open the home page of your chat app
+        
+        if(clients[targetId]){
+
+            clients[targetId].emit("message",msg);
+        }
+        
+        console.log(msg);
+
+        // socket.broadcast.emit('message-receive', data)
+    });
 });
