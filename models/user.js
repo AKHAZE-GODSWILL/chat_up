@@ -7,6 +7,7 @@ const userSchema = mongoose.Schema({
     username: {type: String, unique: true},
     img: String,
     img_id: String,
+    phone: Number,
     stats: {
         post_count: {type: Number, default: 0},
         followers_count: {type: Number, default: 0},
