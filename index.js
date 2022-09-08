@@ -28,7 +28,7 @@ app.use(express.json);
 app.use(express.urlencoded());
 
 app.use('/chats', require('./routes/chats'));
-app.use('/auth', require('../routes/auth'));
+app.use('/auth', require('./routes/auth'));
 
 const PORT = process.env.PORT || 8000;
 const server = app.listen(PORT,()=> console.log(`Server running at port ${PORT}`));
