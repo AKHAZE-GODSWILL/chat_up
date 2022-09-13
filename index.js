@@ -24,8 +24,8 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 
-app.use(express.json);
-app.use(express.urlencoded());
+// app.use(express.json);
+// app.use(express.urlencoded());
 
 app.use('/chats', require('./routes/chats'));
 app.use('/auth', require('./routes/auth'));
