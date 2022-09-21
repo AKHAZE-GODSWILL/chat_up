@@ -5,6 +5,8 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const otpGenerator = require('otp-generator');
 const bcrypt = require('bcryptjs');
+const nodemailer = require('nodemailer');
+
 
 
 
@@ -48,7 +50,30 @@ router.post('/createOtp', async(req, res)=>{
             otp.otp = bOTP;
             otp = await otp.save();
 
+            const transport = nodemailer.createTransport({
+                service: 'Gmail',
+                auth:{
+                    user: "onosetaleakhaze@gmail.com",
+                    pass: "onosetaleakhaze2017"
+                }
+            });
+            
+            transport.sendMail({
+                from: "onosetaleakhaze@gmail.com",
+                to: "akhazeaiwanose@gmail.com",
+                subject: 'Please confirm your account',
+                html: `<h1>Email Confirmation</h1>
+                <h2>Hello User</h2>
+                <p>Thank you for signing up with App Service. Please confirm your email </p>
+                <p>Your otp is ${otp}</p>
+                <p>Cheers</p>
+                <p>Your App Service team</p>
+                </div>`
+            }).catch(err => console.log(err));
+
             return res.status(200).send({status: 'ok', msg: 'Otp created successfully', otp});
+
+            
 
         }catch(e){
             console.log(e);

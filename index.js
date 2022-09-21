@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 dotenv.config();
 const app = express();
+const nodemailer = require('nodemailer');
 
 mongoose.connect(process.env.MONGO_URI);
 
@@ -29,6 +30,7 @@ app.use(bodyParser.urlencoded({
 
 app.use('/chats', require('./routes/chats'));
 app.use('/auth', require('./routes/auth'));
+app.use('/sendImage', require('./utils/multer'));
 
 const PORT = process.env.PORT || 8000;
 const server = app.listen(PORT,()=> console.log(`Server running at port ${PORT}`));
