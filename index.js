@@ -5,6 +5,14 @@ dotenv.config();
 const app = express();
 const nodemailer = require('nodemailer');
 
+////// I need to replace the array storing the id of every connected user with using a database instead. To avoid the 
+/// app from becoming too heavy
+///// I need to replace the directory where images are being stored with using cloudinery instead
+///////////// I need to clean up the routes and make the server app more organized by taking the socket to
+// a different position and taking the multer to a better position in the routes
+// Find out why the uploads folder was made static so it could be accessible
+// Replace the static folder with cloudinary
+
 mongoose.connect(process.env.MONGO_URI);
 
 let clients = [];
@@ -31,6 +39,9 @@ app.use(bodyParser.urlencoded({
 app.use('/chats', require('./routes/chats'));
 app.use('/auth', require('./routes/auth'));
 app.use('/sendImage', require('./utils/multer'));
+
+// Made the uploads folder global so that I could access the contents of the folder from anywhere on through a URL
+app.use('/uploads', express.static('uploads'));
 
 const PORT = process.env.PORT || 8000;
 const server = app.listen(PORT,()=> console.log(`Server running at port ${PORT}`));
