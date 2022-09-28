@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 const app = express();
 const nodemailer = require('nodemailer');
+// const connectedClients = require('./models/connection');
 
 ////// I need to replace the array storing the id of every connected user with using a database instead. To avoid the 
 /// app from becoming too heavy
@@ -63,6 +64,10 @@ io.on('connection', (socket)=>{
 
     socket.on('signin',(id)=>{
 
+        // let connectedUser = new connectedClients;
+        // connectedUser.user_id = id;
+        // connectedUser.clients = socket;
+
         clients[id]= socket;
         console.log(id);
 
@@ -73,6 +78,7 @@ io.on('connection', (socket)=>{
 
         let targetId = msg.targetId;
 
+        // let targetedID = connectedClients.find
         // The receiver of the message might not be present online at that time
         // or might not be on the chat page rather. So if the receiver is on the chat page i.e we have his socket id
         // then you can send his message if not, dont send the message
