@@ -8,6 +8,7 @@ const userSchema = mongoose.Schema({
     img: String,
     img_id: String,
     phone: Number,
+    account_status:{type:String, default: "active"},
     stats: {
         post_count: {type: Number, default: 0},
         followers_count: {type: Number, default: 0},
