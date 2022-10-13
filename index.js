@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 const app = express();
 const nodemailer = require('nodemailer');
+const Chats = require('./models/chats');
 // const connectedClients = require('./models/connection');
 
 ////// I need to replace the array storing the id of every connected user with using a database instead. To avoid the 
