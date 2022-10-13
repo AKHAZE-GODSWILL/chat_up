@@ -2,7 +2,7 @@ const mongoose =  require('mongoose');
 
 const connectedClients = mongoose.Schema(
     {
-        clients: [String],
+        clientSocket: {type: Object},
         user_id: String
     },{collection: "connectedClients"}
 );
