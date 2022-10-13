@@ -143,28 +143,20 @@ router.post('/signup', async (req, res) => {
         user.fullname = fullname;
         user = await user.save();
         
-
-        
-
-        const token = jwt.sign({
-            _id: user._id,
-            email: user.email
-        }, process.env.JWT_SECRET);
-
-        user.token = token;
-        
-
         // TODO: Debug later
         // console.log(user, 'here 1');
         // user['token'] = token;
 
         // console.log(user, 'here 2');
 
-        return res.status(200).send({status: 'ok', msg: 'User created', user, token});
+        return res.status(200).send({status: 'ok', msg: 'User created', user});
 
     }catch(e){
+        if(e.code === 11000){
+            return res.status(400).send({status:"error", msg:"Another account already uses this email" });
+        }
         console.log(e);
-        return res.status(400).send({status: 'error', msg: 'Some error occured', e});
+        return res.status(400).send({status: 'error', msg: 'Some error occured'});
     }
 });
 
@@ -180,25 +172,25 @@ router.post('/login', async (req, res) => {
 
     try{
 
-        const user = await User.findOne({email}).select(['-interests']).lean();
+        const user = await User.findOne({email}).lean();
         if(!user){
             return res.status(404).send({status: 'error', msg: `No user with email: ${email} found`});
         }
 
-        if(user.password != password){
-            return res.status(400).send({status: 'error', msg: 'Email or Password incorrect'});
+
+
+        if(await bcrypt.compare(password,user.password)){
+            delete user.password
+            const token = jwt.sign({
+                _id: user._id,
+                email: user.email
+            }, process.env.JWT_SECRET);
+    
+            user['token'] = token;
+            return res.status(200).send({status: 'ok', msg: 'Login successful', user,token});
         }
 
-        delete user.password
-
-        const token = jwt.sign({
-            _id: user._id,
-            email: user.email
-        }, process.env.JWT_SECRET);
-
-        user['token'] = token;
-
-        return res.status(200).send({status: 'ok', msg: 'Login successful', user})
+        return res.status(400).send({status: 'ok', msg: 'Login details is incorrect'})
 
     }catch(e){
         console.log(e);

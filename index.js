@@ -4,6 +4,8 @@ const dotenv = require('dotenv');
 dotenv.config();
 const app = express();
 const nodemailer = require('nodemailer');
+const connectedClients = require('./models/connection');
+const Chats = require('./models/chats');
 
 ////// I need to replace the array storing the id of every connected user with using a database instead. To avoid the 
 /// app from becoming too heavy
@@ -39,6 +41,7 @@ app.use(bodyParser.urlencoded({
 app.use('/chats', require('./routes/chats'));
 app.use('/auth', require('./routes/auth'));
 app.use('/sendImage', require('./utils/multer'));
+app.use('/viewUsers', require('./routes/viewOps'));
 
 // Made the uploads folder global so that I could access the contents of the folder from anywhere on through a URL
 app.use('/uploads', express.static('uploads'));
@@ -61,18 +64,26 @@ io.on('connection', (socket)=>{
         ConnectedUser.delete(socket.id);
     });
 
-    socket.on('signin',(id)=>{
+    socket.on('signin',async (id)=>{
 
+        //This code is buggy because of the socket line
+
+        // let connectedUser = new connectedClients;
+        // connectedUser.user_id = id;
+        // connectedUser.clientSocket = socket;
+        // connectedUser = await connectedUser.save();
+
+        // console.log(`The content in the socket is >>>>>>>>>> ${socket}`);
         clients[id]= socket;
         console.log(id);
 
-        // socket.broadcast.emit('message-receive', data)
     })
 
-    socket.on('message',(msg)=>{
+    socket.on('message', async(msg)=>{
 
         let targetId = msg.targetId;
 
+        // let targetedID = connectedClients.find
         // The receiver of the message might not be present online at that time
         // or might not be on the chat page rather. So if the receiver is on the chat page i.e we have his socket id
         // then you can send his message if not, dont send the message
@@ -81,9 +92,35 @@ io.on('connection', (socket)=>{
         // That page only listens for new messages and the numner of times the messages was sent 
         // Thats what displays on your screen when you open the home page of your chat app
         
+
         if(clients[targetId]){
 
             clients[targetId].emit("message",msg);
+
+            let chat = new Chats();
+            chat.msg = msg.message;
+            chat.source_id = msg.sourceId;
+            chat.target_id = msg.targetId;
+            chat.image_path = msg.imagePath;
+            chat.isSent  = true;
+            chat.timeStamp = Date.now();
+
+            chat = await chat.save();
+
+        }
+
+        else{
+
+            let chat = new Chats();
+            chat.msg = msg.message;
+            chat.source_id = msg.sourceId;
+            chat.target_id = msg.targetId;
+            chat.image_path = msg.imagePath;
+            chat.isSent  = false;
+            chat.timeStamp = Date.now();
+
+            chat = await chat.save();
+
         }
         
         console.log(msg);
