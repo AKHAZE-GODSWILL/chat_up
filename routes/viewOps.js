@@ -29,7 +29,7 @@ router.post('/allUsers', async(req,res)=>{
             }
         );
 
-        return res.status(200).send({status:"success", msg:"view all users succesful", allUsers})
+        return res.status(200).send({status:"200", msg:"success", allUsers})
     }
     catch(error){
        console.log(error);
