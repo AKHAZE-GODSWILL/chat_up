@@ -142,6 +142,13 @@ router.post('/signup', async (req, res) => {
         user.username = `${email}_${timestamp}`;
         user.fullname = fullname;
         user = await user.save();
+
+        const token = jwt.sign({
+            _id: user._id,
+            email: user.email
+        }, process.env.JWT_SECRET);
+
+        user['token'] = token;
         
         // TODO: Debug later
         // console.log(user, 'here 1');
@@ -149,7 +156,7 @@ router.post('/signup', async (req, res) => {
 
         // console.log(user, 'here 2');
 
-        return res.status(200).send({status: 'ok', msg: 'User created', user});
+        return res.status(200).send({status: 'ok', msg: 'User created', user,token});
 
     }catch(e){
         if(e.code === 11000){
