@@ -85,9 +85,9 @@ io.on('connection', (socket)=>{
         clients[id]= socket.id;
         console.log(id);
 
-        let user = await new User.find({id});
-        user.isOnline = true;
-        await user.save();
+        // let user = await new User.find({id});
+        // user.isOnline = true;
+        // await user.save();
 
     })
 
