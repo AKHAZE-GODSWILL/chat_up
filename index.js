@@ -5,10 +5,10 @@ dotenv.config();
 const app = express();
 const nodemailer = require('nodemailer');
 const Chats = require('./models/chats');
+const User = require('./models/user');
 // const connectedClients = require('./models/connection');
 
-////// I need to replace the array storing the id of every connected user with using a database instead. To avoid the 
-/// app from becoming too heavy
+
 ///// I need to replace the directory where images are being stored with using cloudinery instead
 ///////////// I need to clean up the routes and make the server app more organized by taking the socket to
 // a different position and taking the multer to a better position in the routes
@@ -54,14 +54,22 @@ const io = require('socket.io')(server);
 const ConnectedUser = new Set();
 io.on('connection', (socket)=>{
     console.log("Connected succesfully", socket.id);
-
+    
     
     ConnectedUser.add(socket.id);
     io.emit('connected-user', ConnectedUser.size);
-    socket.on('disconnect',()=>{
+    socket.on('disconnect', async()=>{
 
         console.log("Disconnected",socket.id);
+        // if(clients[]){
+
+        // }
         ConnectedUser.delete(socket.id);
+
+        
+        // let user = new User.find({id});
+        // user.isOnline = false;
+        // await user.save();
     });
 
     socket.on('signin',async (id)=>{
@@ -74,28 +82,22 @@ io.on('connection', (socket)=>{
         // connectedUser = await connectedUser.save();
 
         // console.log(`The content in the socket is >>>>>>>>>> ${socket}`);
-        clients[id]= socket;
+        clients[id]= socket.id;
         console.log(id);
+
+        let user = await new User.find({id});
+        user.isOnline = true;
+        await user.save();
 
     })
 
     socket.on('message', async(msg)=>{
 
         let targetId = msg.targetId;
-
-        // let targetedID = connectedClients.find
-        // The receiver of the message might not be present online at that time
-        // or might not be on the chat page rather. So if the receiver is on the chat page i.e we have his socket id
-        // then you can send his message if not, dont send the message
-        // we rather will only send the message to the database and when the client opens that page, the init state
-        // loads the msg, or the user can also have the socket on down on the page where his contacts are 
-        // That page only listens for new messages and the numner of times the messages was sent 
-        // Thats what displays on your screen when you open the home page of your chat app
         
-
         if(clients[targetId]){
 
-            clients[targetId].emit("message",msg);
+            io.to(clients[targetId]).emit("message",msg);
 
             let chat = new Chats();
             chat.msg = msg.message;
@@ -125,6 +127,5 @@ io.on('connection', (socket)=>{
         
         console.log(msg);
 
-        // socket.broadcast.emit('message-receive', data)
     });
 });
