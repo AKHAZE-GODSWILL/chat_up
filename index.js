@@ -59,32 +59,21 @@ io.on('connection', (socket)=>{
     ConnectedUser.add(socket.id);
     io.emit('connected-user', ConnectedUser.size);
     socket.on('disconnect', async()=>{
-
+        let index = clients.indexOf(socket.id);
+        clients.splice(index,1,0);
+        io.emit('onlineUsers', clients);
         console.log("Disconnected",socket.id);
-        // if(clients[]){
-
-        // }
         ConnectedUser.delete(socket.id);
 
-        
-        // let user = new User.find({id});
-        // user.isOnline = false;
-        // await user.save();
     });
 
     socket.on('signin',async (id)=>{
-
-        //This code is buggy because of the socket line
-
-        // let connectedUser = new connectedClients;
-        // connectedUser.user_id = id;
-        // connectedUser.clientSocket = socket;
-        // connectedUser = await connectedUser.save();
 
         // console.log(`The content in the socket is >>>>>>>>>> ${socket}`);
         clients[id]= socket.id;
         console.log(id);
 
+        io.emit('onlineUsers', clients);
         // let user = await new User.find({id});
         // user.isOnline = true;
         // await user.save();
@@ -93,6 +82,7 @@ io.on('connection', (socket)=>{
 
     socket.on('message', async(msg)=>{
 
+        // >>>>>>>>>>>>>i have to fix the sending image feature which no longer works
         let targetId = msg.targetId;
         
         if(clients[targetId]){
