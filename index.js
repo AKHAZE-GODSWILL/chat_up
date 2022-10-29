@@ -64,6 +64,7 @@ io.on('connection', (socket)=>{
         clients.splice(index,1,0);
         io.emit('onlineUsers', clients);
         console.log("Disconnected",socket.id);
+        console.log(clients);
         ConnectedUser.delete(socket.id);
 
     });
@@ -74,7 +75,7 @@ io.on('connection', (socket)=>{
         clients[id]= socket.id;
         console.log(id);
         console.log(clients);
-        console.log(`>>>>>>>>> these are all the logged in clients ${clients}`);
+        console.log(`The connected clients ${clients}`);
         io.emit('onlineUsers', clients);
         // let user = await new User.find({id});
         // user.isOnline = true;
