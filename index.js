@@ -72,6 +72,7 @@ io.on('connection', (socket)=>{
         // console.log(`The content in the socket is >>>>>>>>>> ${socket}`);
         clients[id]= socket.id;
         console.log(id);
+        console.log(clients[id]);
         console.log(`>>>>>>>>> these are all the logged in clients ${clients}`);
         io.emit('onlineUsers', clients);
         // let user = await new User.find({id});
