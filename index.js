@@ -58,7 +58,8 @@ io.on('connection', (socket)=>{
     
     ConnectedUser.add(socket.id);
     io.emit('connected-user', ConnectedUser.size);
-    socket.on('disconnect', async()=>{
+
+    socket.on('disconnect', ()=>{
         let index = clients.indexOf(socket.id);
         clients.splice(index,1,0);
         io.emit('onlineUsers', clients);
@@ -67,12 +68,12 @@ io.on('connection', (socket)=>{
 
     });
 
-    socket.on('signin',async (id)=>{
+    socket.on('signin', (id)=>{
 
         // console.log(`The content in the socket is >>>>>>>>>> ${socket}`);
         clients[id]= socket.id;
         console.log(id);
-        console.log(clients[id]);
+        console.log(clients);
         console.log(`>>>>>>>>> these are all the logged in clients ${clients}`);
         io.emit('onlineUsers', clients);
         // let user = await new User.find({id});
