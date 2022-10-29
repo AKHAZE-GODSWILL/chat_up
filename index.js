@@ -74,7 +74,7 @@ io.on('connection', (socket)=>{
 
         // console.log(`The content in the socket is >>>>>>>>>> ${socket}`);
         let socketId = socket.id;
-        clients.add({id,socketId});
+        clients.push({id,socketId});
         // console.log(id);
         console.log(clients);
         console.log(`The connected clients ${clients}`);
