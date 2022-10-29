@@ -60,7 +60,7 @@ io.on('connection', (socket)=>{
     io.emit('connected-user', ConnectedUser.size);
 
     socket.on('disconnect', ()=>{
-        let index = clients.indexOf(socket.id.toString());
+        let index = clients.indexOf(item => item.socketId === socket.id);
         console.log(index);
         clients.splice(index,1,0);
         io.emit('onlineUsers', clients);
@@ -73,8 +73,9 @@ io.on('connection', (socket)=>{
     socket.on('signin', (id)=>{
 
         // console.log(`The content in the socket is >>>>>>>>>> ${socket}`);
-        clients[id]= socket.id;
-        console.log(id);
+        let socketId = socket.id;
+        clients.add({id,socketId});
+        // console.log(id);
         console.log(clients);
         console.log(`The connected clients ${clients}`);
         io.emit('onlineUsers', clients);
