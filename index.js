@@ -94,10 +94,10 @@ io.on('connection', (socket)=>{
         // >>>>>>>>>>>>>i have to fix the sending image feature which no longer works
         let targetId = msg.targetId;
         let client = clients.find(item => item.id === targetId);
-        
-        if(client.id){
+        console.log(client.socketId);
+        if(client.socketId){
 
-            io.to(client.id).emit("message",msg);
+            io.to(client.socketId).emit("message",msg);
 
             let chat = new Chats();
             chat.msg = msg.message;
