@@ -60,6 +60,7 @@ io.on('connection', (socket)=>{
     io.emit('connected-user', ConnectedUser.size);
 
     socket.on('disconnect', ()=>{
+        let client = clients.find(({socketId}) => socketId == socket.id );
         let index = clients.findIndex(
             object => {
                 return object.socketId === socket.id;
@@ -68,6 +69,7 @@ io.on('connection', (socket)=>{
         console.log(index);
         clients.splice(index,1);
         io.emit('onlineUsers', clients);
+        io.emit('offlineUser', client);
         console.log("Disconnected",socket.id);
         console.log(clients);
         ConnectedUser.delete(socket.id);
