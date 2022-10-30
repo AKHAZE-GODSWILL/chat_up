@@ -66,7 +66,7 @@ io.on('connection', (socket)=>{
             }
         );
         console.log(index);
-        clients.splice(index,1,0);
+        clients.splice(index,1);
         io.emit('onlineUsers', clients);
         console.log("Disconnected",socket.id);
         console.log(clients);
