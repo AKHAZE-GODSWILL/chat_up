@@ -95,7 +95,7 @@ io.on('connection', (socket)=>{
         let targetId = msg.targetId;
         let client = clients.find(({id}) => id == targetId );
         
-        if(client.socketId !== undefined){
+        if(client !== undefined){
 
             io.to(client.socketId).emit("message",msg);
 
