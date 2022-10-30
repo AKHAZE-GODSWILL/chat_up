@@ -93,37 +93,39 @@ io.on('connection', (socket)=>{
 
         // >>>>>>>>>>>>>i have to fix the sending image feature which no longer works
         let targetId = msg.targetId;
-        let client = clients.find(item => item.id === targetId);
+        let client = clients.find(object => {
+            return object.id === targetId;
+        });
         console.log(client.socketId);
-        if(client.socketId){
+        // if(client.socketId){
 
-            io.to(client.socketId).emit("message",msg);
+        //     io.to(client.socketId).emit("message",msg);
 
-            let chat = new Chats();
-            chat.msg = msg.message;
-            chat.source_id = msg.sourceId;
-            chat.target_id = msg.targetId;
-            chat.image_path = msg.imagePath;
-            chat.isSent  = true;
-            chat.timeStamp = Date.now();
+        //     let chat = new Chats();
+        //     chat.msg = msg.message;
+        //     chat.source_id = msg.sourceId;
+        //     chat.target_id = msg.targetId;
+        //     chat.image_path = msg.imagePath;
+        //     chat.isSent  = true;
+        //     chat.timeStamp = Date.now();
 
-            chat = await chat.save();
+        //     chat = await chat.save();
 
-        }
+        // }
 
-        else{
+        // else{
 
-            let chat = new Chats();
-            chat.msg = msg.message;
-            chat.source_id = msg.sourceId;
-            chat.target_id = msg.targetId;
-            chat.image_path = msg.imagePath;
-            chat.isSent  = false;
-            chat.timeStamp = Date.now();
+        //     let chat = new Chats();
+        //     chat.msg = msg.message;
+        //     chat.source_id = msg.sourceId;
+        //     chat.target_id = msg.targetId;
+        //     chat.image_path = msg.imagePath;
+        //     chat.isSent  = false;
+        //     chat.timeStamp = Date.now();
 
-            chat = await chat.save();
+        //     chat = await chat.save();
 
-        }
+        // }
         
         console.log(msg);
 
