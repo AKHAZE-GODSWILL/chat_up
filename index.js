@@ -60,7 +60,11 @@ io.on('connection', (socket)=>{
     io.emit('connected-user', ConnectedUser.size);
 
     socket.on('disconnect', ()=>{
-        let index = clients.indexOf(item => item.socketId === socket.id);
+        let index = client.findIndex(
+            object => {
+                return object.socketId === socket.id;
+            }
+        );
         console.log(index);
         clients.splice(index,1,0);
         io.emit('onlineUsers', clients);
