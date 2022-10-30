@@ -60,7 +60,7 @@ io.on('connection', (socket)=>{
     io.emit('connected-user', ConnectedUser.size);
 
     socket.on('disconnect', ()=>{
-        let index = client.findIndex(
+        let index = clients.findIndex(
             object => {
                 return object.socketId === socket.id;
             }
