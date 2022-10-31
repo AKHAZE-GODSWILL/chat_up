@@ -40,9 +40,9 @@ app.use(bodyParser.urlencoded({
 
 app.use('/chats', require('./routes/chats'));
 app.use('/auth', require('./routes/auth'));
-app.use('/sendImage', require('./utils/multer'));
+// app.use('/sendImage', require('./utils/multer'));
 app.use('/viewUsers', require('./routes/viewOps'));
-
+app.use('/posts', require('./routes/posts'));
 // Made the uploads folder global so that I could access the contents of the folder from anywhere on through a URL
 app.use('/uploads', express.static('uploads'));
 
