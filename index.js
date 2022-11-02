@@ -87,7 +87,14 @@ io.on('connection', (socket)=>{
         // user.isOnline = true;
         // await user.save();
 
-    })
+    });
+
+    socket.on('stories', (data)=>{
+
+        console.log(data);
+        io.broadcast.emit('stories',data);
+
+    });
 
     socket.on('message', async(msg)=>{
 

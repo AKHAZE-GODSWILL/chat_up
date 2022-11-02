@@ -40,39 +40,6 @@ router.post('/uploadImage', upload.single('image'), async (req, res) => {
 
 });
 
-// // endpoint to post stories
-// router.post('/postStories', upload.single('image'), async (req, res) => {
-//     const {token} = req.body;
-//     if(!token){
-//         return res.status(400).send({status: 'error', msg: 'All fields must be filled'});
-//     }
-
-//     try{
-//         const timestamp = Date.now();
-
-//         let user = jwt.verify(token, process.env.JWT_SECRET);
-//         if(!user){
-//             return res.status(400).send({msg: "No user found. Wrong token passed in" });
-//         }
-
-//         let img_url;
-//         let img_id;
-        
-//         const result = await cloudinary.uploader.upload(req.file.path, {folder: 'chat_up'});
-//         img_url = result.secure_url;
-//         img_id = result.public_id;
-
-        
-//         return res.status(200).send({status: 'ok', msg: 'Success', img_url});
-
-
-//     }catch(e){
-//         console.log(e);
-//         return res.status({status: 'error', msg: 'An error occured'});
-//     }
-
-// });
-
 // endpoint to change profile picture
 router.post('/updateProfilePic', upload.single('image'), async (req, res) => {
     const {token} = req.body;
