@@ -92,7 +92,7 @@ io.on('connection', (socket)=>{
     socket.on('stories', (data)=>{
 
         console.log(data);
-        io.broadcast.emit('stories',data);
+        io.emit('stories',data);
 
     });
 
