@@ -135,4 +135,22 @@ io.on('connection', (socket)=>{
         console.log(msg);
 
     });
+
+    socket.on('wave', async(wave)=>{
+
+        // >>>>>>>>>>>>>i have to fix the sending image feature which no longer works
+        let targetId = wave.targetId;
+        let client = clients.find(({id}) => id == targetId );
+        
+        if(client !== undefined){
+
+            io.to(client.socketId).emit("wave",wave);
+
+        }
+
+        else{}
+        
+        console.log(wave);
+
+    });
 });
