@@ -1,3 +1,7 @@
+
+
+
+
 const mongoose = require('mongoose');
 
 const otpSchema =  mongoose.Schema({
@@ -13,3 +17,9 @@ const otpSchema =  mongoose.Schema({
 
 const model = mongoose.model('Otp', otpSchema);
 module.exports = model;
+
+
+
+
+
+
